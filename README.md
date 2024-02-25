@@ -1,6 +1,6 @@
 # Android Network Interception Case Study: Observing OkHttp Traffic without Bypassing Certificate Pinning
 
-This project provides a case study demonstrating how to intercept the majority of OkHttp3 network traffic within an Android application without directly bypassing certificate pinning. The technique leverages Frida's dynamic instrumentation capabilities.
+This project provides a case study demonstrating how to intercept the majority of OkHttp3 network traffic within an Android application without directly bypassing certificate pinning. This technique leverages Frida's dynamic instrumentation capabilities.
 
 ## Key Features
 
