@@ -8,65 +8,28 @@ This project provides a case study demonstrating how to intercept the majority o
 - Obfuscation Handling: Frida's capabilities allow circumventing common obfuscation techniques used to protect Android applications.
 - Customization: The provided code serves as a modifiable template for you to tailor to your specific analysis needs.
 
-## Prerequisites
-
-- Rooted Android Device or Emulator: Frida often requires root access or a debuggable environment.
-- Frida Installed: Refer to Frida's documentation for installation on your OS and Android device: https://frida.re/docs/installation/
-- Basic Frida Knowledge: Understanding core Frida concepts (scripting, attaching, hooking) is beneficial.
-- Android App (.apk): The obfuscated Android application you intend to analyze.
-
-
 ## Usage
 
-1. Connect to Device: Establish an ADB connection to your Android device or emulator.
+**Prerequisites**
 
-2. Install Frida Server: Download and install the appropriate Frida server version for your device's architecture.
+* Rooted Android device or emulator.
+* Frida installed and configured on your system.
+* Target Android application (.apk) installed on your device.
 
-3. Launch App: Start the target Android application on the device.
+**Steps**
 
-4. Run Frida Script: Modify script.js with any necessary adjustments for targeting specific OkHttp classes. Then execute the script:
+1. **Obtain App Package Name:** Find the package name (app ID) of your target Android app. You can often find this in the app's properties in the Play Store or using a tool like `adb shell pm list packages`.
 
-```bash
-frida -U -f [app.package.name] -l script.js --no-pause
-```
+2. **Start the Target App:** Launch the target application on your Android device.
 
+3. **Run the `injector.js` Script:** Execute the following command in your terminal, replacing `com.example.app` with the actual package name you obtained:
 
-
-
-Example script.js
-
-```javaScript
-Java.perform(function() {
-    // Target OkHttp's relevant classes (adjust if obfuscated)
-    var OkHttpClient = Java.use("okhttp3.OkHttpClient");
-    var Request = Java.use("okhttp3.Request");
-    var Response = Java.use("okhttp3.Response");
-
-    // Hook into OkHttp's call method
-    OkHttpClient.newCall.overload("okhttp3.Request").implementation = function(request) {
-        console.log("Request URL:", request.url().toString());
-        console.log("Request Headers:", request.headers());
-        // ... (add more logging or modifications)
-
-        var result = this.newCall(request); 
-        return result;
-    };
-
-    // Hook into OkHttp's response handling
-    Response.body.implementation = function() {
-        console.log("Response Body:", this.body().string());
-        // ... (add more logging or modifications)
-
-        var result = this.body();
-        return result;
-    };
-});
-```
-
+   ```bash
+   frida -U -f com.example.app -l injector.js --no-pause
+   ```
 
 ### Important Notes
 
-- App-Specific Adjustments: You will likely need to modify class names and method signatures in script.js if the target app uses obfuscation.
 - Security Considerations: Be mindful of the security and ethical implications of intercepting network traffic from applications you don't own.
 - Frida Power: Explore Frida's extensive capabilities for even more advanced instrumentation scenarios.
 
